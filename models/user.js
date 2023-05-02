@@ -53,10 +53,24 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: { msg: 'role must not be empty' },
       },
     },
+    // avatar:[ {
+    //   public_id: {
+    //     type: DataTypes.STRING,
+    //     allowNull: true
+    //         },
+    //   url: {
+    //     type: DataTypes.STRING,
+    //     allowNull: true
+    //   },
+    // }],
 
-    resetPasswordToken: DataTypes.STRING,
-    resetPasswordExpire: DataTypes.DATE
-  }, {
+    resetPasswordToken:{ 
+      type: DataTypes.STRING
+    },
+    resetPasswordExpire:{ 
+      type: DataTypes.DATE
+    }
+   }, {
     sequelize,
     modelName: 'User',
     tableName: 'users'

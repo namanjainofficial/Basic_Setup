@@ -1,5 +1,6 @@
 const { sequelize } =require('./models')
 const app = require('./app')
+const cloudinary = require("cloudinary");
 
 // Handling Uncaught Exception
 process.on("uncaughtException", (err) => {
@@ -17,6 +18,13 @@ const server = app.listen(process.env.PORT || 5001, async ()=>{
     await sequelize.sync();
     console.log('Database connected...')
 })
+
+//connection to cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // Unhandled Promise Rejection
 process.on("unhandledRejection", (err) => {

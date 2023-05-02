@@ -29,6 +29,16 @@ module.exports = {
         type: DataTypes.STRING,
         defaultValue: 'user'
       },
+      // avatar:[{
+      //   public_id: {
+      //     type: DataTypes.STRING,
+      //     allowNull: true
+      //         },
+      //   url: {
+      //     type: DataTypes.STRING,
+      //     allowNull: true
+      //   },
+      // }],
       resetPasswordToken: {
         type: DataTypes.STRING
       },

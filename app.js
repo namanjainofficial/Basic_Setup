@@ -21,8 +21,10 @@ app.use(express.urlencoded({ extended: true }))
 
 
 //routes
-const auth = require('./routes/authRoutes')
+const auth = require('./routes/authRoutes');
+const user = require('./routes/userRoutes')
 
 app.use("/api/auth", auth);
+app.use("/api/users", user);
 
 module.exports = app;
