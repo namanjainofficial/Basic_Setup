@@ -1,57 +1,52 @@
 const ErrorHandler = require("../utils/errorhandler");
 const catchAsyncErrors = require('../middleware/catchAsyncError');
-const { User } = require('../models');
+const { Customer } = require('../models');
 const bcrypt = require("bcryptjs");
 const { createError } = require('../utils/error')
-//const sendToken = require('../utils/jwtToken')
+//const {sendToken} = require('../utils/jwtToken')
 const jwt = require('jsonwebtoken')
 const cloudinary = require("cloudinary");
 
-//register a user
-exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-    // const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-    //     folder: "avatars",
-    //     width: 150,
-    //     crop: "scale",
-    //   });
+//register a customer
+exports.registerCustomer = catchAsyncErrors(async (req, res, next) => {
 
-    const { userName, email, password, role } = req.body;
+    const { username, email, password, phone_number } = req.body;
 
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync( password, salt);
 
-    const newUser = await User.create({
-        userName,
+    const newCustomer = await Customer.create({
+        username,
         email,
         password: hash,
-        role,
+        phone_number,
         
     });
 
-    await newUser.save();
-    res.status(200).send("User has been created.");  
+    await newCustomer.save();
+    res.status(200).send("customer has been created.");  
 })
 
 //login user
-exports.loginUser = catchAsyncErrors(async (req, res, next) => {
+exports.loginCustomer = catchAsyncErrors(async (req, res, next) => {
 
     const { email, password } = req.body;
-    const user = await User.findOne({ where: { email } });
-    console.log(user);
-    if (!user) return next(createError(404, "User not found!"));
+    const customer = await Customer.findOne({ where: { email } });
+    
+    if (!customer) return next(createError(404, "customer Not Found/ register"));
 
     const isPasswordCorrect = await bcrypt.compareSync(
         password,
-        user.password
+        customer.password
     );
     if (!isPasswordCorrect)
-        return next(createError(400, "Wrong password or username!"));
+        return next(createError(404, "Email or password does not Match!"));
 
     const token = jwt.sign({ 
-        id: user.uuid, role: user.role 
+        id: customer.uuid, role: customer.role 
         },
         process.env.JWT_SECRET,
-        //{ expires: "24h"}
+       // { expiresIn: process.env.JWT_EXPIRE}
     );
     //sendToken(user, 200, res);
     res
@@ -59,17 +54,13 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
         httpOnly: true,
       })
       .status(200)
-      .json({ message: 'successfully login', role: user.role, token: token });
+      .json({ message: 'successfully login', role: customer.role, token: token });
 
 })
 
-//OTP generator
-// exports.optGenerator = catchAsyncErrors(async (req, res, next) => {
-
-// })
 
 //logout
-exports.logoutUser = catchAsyncErrors(async (req, res, next) => {
+exports.logoutCustomer = catchAsyncErrors(async (req, res, next) => {
     res.cookie("token", null, {
         expires: new Date(Date.now()),
         httpOnly: true,

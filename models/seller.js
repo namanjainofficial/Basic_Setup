@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
+  class Seller extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,16 +13,16 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  User.init({
+  Seller.init({
     uuid: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
     },
-    userName: {
+    username: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notNull: { msg: 'User must have a name' },
+        notNull: { msg: 'Seller must have a name' },
         notEmpty: { msg: 'Name must not be empty' }
       },
     },
@@ -33,17 +33,12 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         max: 30,
         min: 8,
-        notNull: { msg: 'User must have a email' },
+        notNull: { msg: 'Seller must have a email' },
         isEmail: { msg: 'Must be a valid email address' },
       },
     },
     role: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: { msg: 'User must have a role' },
-        notEmpty: { msg: 'role must not be empty' },
-      },
     },
     password: {
       type: DataTypes.STRING,
@@ -53,33 +48,13 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: { msg: 'role must not be empty' },
       },
     },
-    // avatar:[ {
-    //   public_id: {
-    //     type: DataTypes.STRING,
-    //     allowNull: true
-    //         },
-    //   url: {
-    //     type: DataTypes.STRING,
-    //     allowNull: true
-    //   },
-    // }],
-
-    resetPasswordToken:{ 
-      type: DataTypes.STRING
+    phone_number:{
+      type: DataTypes.INTEGER
     },
-    resetPasswordExpire:{ 
-      type: DataTypes.DATE
-    }
-   }, {
+  }, {
     sequelize,
-    modelName: 'User',
-    tableName: 'users'
+    tableName: 'sellers',
+    modelName: 'Seller',
   });
-  // JWT TOKEN
-  // User.methods.getJWTToken = function () {
-  //   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-  //     expiresIn: process.env.JWT_EXPIRE,
-  //   });
-  // };
-  return User;
+  return Seller;
 };

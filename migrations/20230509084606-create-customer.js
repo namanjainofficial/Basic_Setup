@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, DataTypes) {
-    await queryInterface.createTable('users', {
+    await queryInterface.createTable('Customers', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -13,37 +13,22 @@ module.exports = {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
-      userName: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      username: {
+        type: DataTypes.STRING
       },
       email: {
+        type: DataTypes.STRING
+      },
+      role: {
         type: DataTypes.STRING,
-        allowNull: false,
+        defaultValue: 'customer'
       },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      role: {
-        type: DataTypes.STRING,
-        defaultValue: 'user'
-      },
-      // avatar:[{
-      //   public_id: {
-      //     type: DataTypes.STRING,
-      //     allowNull: true
-      //         },
-      //   url: {
-      //     type: DataTypes.STRING,
-      //     allowNull: true
-      //   },
-      // }],
-      resetPasswordToken: {
-        type: DataTypes.STRING
-      },
-      resetPasswordExpire: {
-        type: DataTypes.DATE
+      phone_number:{
+        type: DataTypes.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -56,6 +41,6 @@ module.exports = {
     });
   },
   async down(queryInterface, DataTypes) {
-    await queryInterface.dropTable('users');
+    await queryInterface.dropTable('Customers');
   }
 };

@@ -9,28 +9,17 @@ const verifyToken = async (req, res, next) => {
         return next(createError(401, "You are not authenticated!"));
     }
 
-    jwt.verify(token, process.env.JWT, (err, user) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) return next(createError(403, "Token is not valid!"));
         req.user = user;
-        next();
+        
     });
-    // const { token } = req.cookies;
-
-    // if (!token) {
-    //     return next(new createError("Please Login to access this resource", 401));
-    // }
-
-    // const decodedData = jwt.verify(token, process.env.JWT_SECRET);
-
-    // req.user = await User.findById(decodedData.id);
-
-    // next();
 };
 
 //user or customer verification
-const verifyUser = (req, res, next) => {
+const verifyCustomer = (req, res, next) => {
     verifyToken(req, res, next, () => {
-        if (req.user.id === req.params.id || req.user.role === 'customer') {
+        if (req.user.id === req.params.id || req.user.role === 'user') {
             next();
         } else {
             return next(createError(403, "You are not authorized!"));
@@ -63,4 +52,4 @@ const verifyAdmin = (req, res, next) => {
 };
 
 
-module.exports = { verifySeller, verifyUser, verifyAdmin }
+module.exports = { verifyToken, verifySeller, verifyCustomer, verifyAdmin }
